@@ -1,0 +1,9 @@
+# github.com/gorilla/mux v1.8.0
+github.com/gorilla/mux
+# github.com/openfaas/faas-provider v0.18.9
+## explicit
+github.com/openfaas/faas-provider
+github.com/openfaas/faas-provider/auth
+github.com/openfaas/faas-provider/httputil
+github.com/openfaas/faas-provider/logs
+github.com/openfaas/faas-provider/types
