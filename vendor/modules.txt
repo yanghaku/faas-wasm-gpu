@@ -1,4 +1,5 @@
 # github.com/gorilla/mux v1.8.0
+## explicit
 github.com/gorilla/mux
 # github.com/openfaas/faas-provider v0.18.9
 ## explicit

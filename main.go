@@ -13,7 +13,16 @@ import (
 )
 
 func init() {
+	f, ok := os.LookupEnv("log_file")
+	if ok { // if not set log_file, use the stdout
+		file, err := os.Create(f)
+		if err != nil {
+			log.SetOutput(file)
+		}
+	}
+
 	log.SetPrefix("[faas-wasm-cuda] ")
+	log.SetFlags(log.Ltime | log.Lmicroseconds)
 }
 
 func main() {
@@ -28,7 +37,7 @@ func main() {
 	readTimeout := time.Duration(parseIntValue(os.Getenv("read_timeout"), defaultReadTimeout)) * time.Second
 	writeTimeout := time.Duration(parseIntValue(os.Getenv("write_timeout"), defaultWriteTimeout)) * time.Second
 	port := parseIntValue(os.Getenv("port"), defaultTCPPort)
-	log.Printf("tcp port = %d", port)
+	log.Printf("tcp port = %d\n", port)
 
 	log.Println("Starting controller")
 	runController(port, readTimeout, writeTimeout)

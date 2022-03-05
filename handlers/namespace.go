@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -9,17 +10,22 @@ import (
 // NamespaceLister return an empty list
 func NamespaceLister() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		namespaces := []string{}
-		nsJSON, err := json.Marshal(namespaces)
-
-		if err != nil {
-			log.Printf("Unable to marshal namespaces into JSON %q", err)
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("\"error\": \"unable to return namespaces\""))
+		if r.Body != nil {
+			defer r.Body.Close()
 		}
 
+		var namespaces []string
+
+		out, err := json.Marshal(namespaces)
+		if err != nil {
+			errStr := fmt.Errorf("failed to list namespaces: %s", err.Error()).Error()
+			http.Error(w, errStr, http.StatusInternalServerError)
+			log.Println(errStr)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write(nsJSON)
+		w.Write(out)
 	}
 }
