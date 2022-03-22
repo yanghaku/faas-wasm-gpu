@@ -1,0 +1,77 @@
+version: "3.7"
+
+services:
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    # nobody
+    user: "65534"
+    volumes:
+      # Config directory
+      - type: bind
+        source: ./config/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+      - type: bind
+        source: ./config/alert.rules.yml
+        target: /etc/prometheus/alert.rules.yml
+
+      # Data directory
+      - type: bind
+        source: ./data/prometheus
+        target: /prometheus
+    cap_add:
+      - NET_RAW
+    ports:
+      - "9090:9090"
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    # nobody
+    user: "65534"
+    volumes:
+      - type: bind
+        source: ./config/alertmanager.yml
+        target: /alertmanager.yml
+    cap_add:
+      - NET_RAW
+
+  nats:
+    image: docker.io/library/nats-streaming:latest
+    # nobody
+    user: "65534"
+    command:
+      - "-m"
+      - "8222"
+      - "--store=file"
+      - "--dir=/nats"
+      - "--cluster_id=faas-cluster"
+    volumes:
+      # Data directory
+      - type: bind
+        source: ./data/nats
+        target: /nats
+    ports:
+      - "127.0.0.1:8222:8222"
+
+  gateway:
+    image: ghcr.io/openfaas/gateway:latest
+    # nobody
+    user: "65534"
+    environment:
+      - basic_auth=false
+      - functions_provider_url=http://192.168.1.67:8081/
+      - direct_functions=false
+      - read_timeout=60s
+      - write_timeout=60s
+      - upstream_timeout=65s
+      - faas_nats_address=nats
+      - faas_nats_port=4222
+      - auth_proxy_pass_body=false
+      - secret_mount_path=/run/secrets
+      - scale_from_zero=true
+    cap_add:
+      - NET_RAW
+    depends_on:
+      - nats
+      - prometheus
+    ports:
+      - "8080:8080"

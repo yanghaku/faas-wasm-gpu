@@ -33,14 +33,14 @@ func MakeSecretsHandler() http.HandlerFunc {
 
 // listSecrets get all secrets
 func listSecrets(w http.ResponseWriter) {
-	names, err := controllerInstance.SecretsClient.List()
+	secrets, err := controllerInstance.SecretsClient.List()
 	if err != nil {
 		errStr := fmt.Errorf("secret list error: %s", err.Error()).Error()
 		http.Error(w, errStr, http.StatusInternalServerError)
 		return
 	}
 
-	secretsBytes, err := json.Marshal(names)
+	secretsBytes, err := json.Marshal(secrets)
 	if err != nil {
 		errStr := fmt.Errorf("secrets json marshal error: %s", err.Error()).Error()
 		http.Error(w, errStr, http.StatusInternalServerError)

@@ -30,7 +30,7 @@ func main() {
 	sha, release := version.GetReleaseInfo()
 	log.Printf("faas-wasm-cuda version:%s. Last commit SHA: %s\n", release, sha)
 
-	defaultTCPPort := 8080
+	defaultTCPPort := 8081
 	defaultReadTimeout := 3
 	defaultWriteTimeout := 3
 

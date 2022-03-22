@@ -5,7 +5,7 @@ import "github.com/openfaas/faas-provider/types"
 // SecretsClient exposes the standardized CRUD behaviors for secrets.
 type SecretsClient interface {
 	// List returns a list of available function secrets.
-	List() (names []string, err error)
+	List() (names []*types.Secret, err error)
 	// Create adds a new secret
 	Create(secret types.Secret) error
 	// Replace updates the value of a function secret
@@ -23,11 +23,11 @@ type DefaultMemorySecretsClient struct {
 }
 
 // List implements the list function
-func (c *DefaultMemorySecretsClient) List() (names []string, err error) {
-	res := make([]string, len(c.secrets))
+func (c *DefaultMemorySecretsClient) List() (names []*types.Secret, err error) {
+	res := make([]*types.Secret, len(c.secrets))
 	idx := 0
-	for n, _ := range c.secrets {
-		res[idx] = n
+	for _, s := range c.secrets {
+		res[idx] = s
 		idx += 1
 	}
 	return res, nil
