@@ -12,7 +12,7 @@ const (
 	//OrchestrationIdentifier identifier string for provider orchestration
 	OrchestrationIdentifier = "WebAssembly"
 	//ProviderName name of the provider
-	ProviderName = "faas-wasm-cuda"
+	ProviderName = "faas-wasm-gpu"
 )
 
 //MakeInfoHandler creates handler for /system/info endpoint

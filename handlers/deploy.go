@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/openfaas/faas-provider/types"
-	"github.com/yanghaku/faas-wasm-cuda/controller"
+	"github.com/yanghaku/faas-wasm-gpu/controller"
 	"io/ioutil"
 	"net/http"
 )

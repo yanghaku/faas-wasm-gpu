@@ -1,4 +1,4 @@
-module github.com/yanghaku/faas-wasm-cuda
+module github.com/yanghaku/faas-wasm-gpu
 
 go 1.16
 
